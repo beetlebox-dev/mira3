@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<!-- Copyright 2021 Johnathan Pennington | All rights reserved. -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Beetlebox Web Apps</title>
+    <meta name="description" content="Page not found.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% include "icons.html" %}
+    <style>
+        body {
+            margin: 0;
+            font-family: Menlo, Monaco, 'Courier New', monospace;
+            text-align: center;
+            background-color: #1c1c1c;
+            color: hsl(0, 0%, 90%);
+        }
+        #text-container {
+            width: 80vw;
+            padding: 10vw;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .yellow {
+            color: hsl(42, 100%, 70%);
+        }
+        .blue {
+            color: hsl(228, 100%, 70%);
+        }
+        a {
+            color: hsl(128, 100%, 70%);
+        }
+        a:hover {
+            color: hsl(306, 100%, 50%);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="text-container">
+        <h1 class="large">That <span class="yellow">URL</span> does not compute<span class="blue">!</span></h1>
+        <br>
+        <p>Did you mean <a href="{{ relpath }}">{{ a_text|safe }}</a><span class="blue">?</span></p>
+    </div>
+</body>
+
+<!-- Automatic redirect & timing.
+
+In body:
+<p>You will be automatically redirected there in <span class="blue">8</span> seconds.</p>
+
+<script>
+
+let count = 8;
+let intervalId = setInterval(countdown, 1000);
+
+function countdown() {
+    count -= 1;
+    document.querySelector('span.blue').innerHTML = count;
+    if (count === 0) {
+        clearInterval(intervalId)
+        document.querySelector('a').click();
+    };
+};
+
+</script> -->
+
+</html>

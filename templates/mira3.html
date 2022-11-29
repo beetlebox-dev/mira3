@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<!-- Copyright 2022 Johnathan Pennington | All rights reserved. -->
+
+<head>
+    <meta charset="utf-8">
+    <title>MIRA3 | Image Animator</title>
+    <meta name="description" content="An image animator.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bug.css') }}">
+
+    <style>
+
+        #bug {
+            filter: invert(86%) sepia(100%) saturate(4013%) hue-rotate(265deg) brightness(95%) contrast(143%);  /* Change white to "indigo" hsl(267, 100%, 50%). */
+        }
+        #bug:hover {
+            filter: none;
+        }
+
+        .hide-before-img-load {
+            display: none;
+        }
+
+        .flip-horizontal {
+            transform: scaleX(-1);
+        }
+
+        .flip-vertical {
+            transform: scaleY(-1);
+        }
+
+        body, html, #canvas1-container {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            margin: 0;
+            background-color: hsl(267, 14%, 12%);
+            user-select: none;
+        }
+
+        #canvas1 {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #canvas2 {
+            position: absolute;
+            top: max(2vh, 2vw);
+            right: max(2vh, 2vw);
+            height: max(18vh, 18vw);
+            border: 0.3vh solid hsl(267, 100%, 50%);
+            border-radius: max(1.5vh, 1.5vw);
+        }
+
+        #canvas2:hover {
+            border: 0.3vh solid white;
+        }
+
+        #load-more-button {
+            display: none;
+            position: absolute;
+            right: 6vw;  /* control strip padding right */
+            bottom: 18vh;  /* control strip height + distance from control strip */
+            height: min(6vh, 12vw);  /* Constant proportion 1:2 */
+        }
+
+        #control-strip {
+            position: fixed;
+            bottom: 0;
+            height: 15vh;
+            width: 88vw;
+            padding: 0 6vw;
+            /* width + left & right padding = 100 vw */
+            background-color: hsla(267, 100%, 0%, 0.7);
+        }
+
+        #scroll-area {
+            padding: 3.4vh 0;
+            touch-action: none;
+        }
+        #scroll-line {
+            background: hsl(267, 100%, 50%);
+            height: 0.3vh;
+            width: 0%;
+            border: 0;
+            margin: 0;
+            padding: 0;
+            touch-action: none;
+        }
+        #scroller {
+            background-color: hsl(267, 100%, 50%);
+            position: absolute;
+            width: 2vh;
+            height: 4vh;
+            top: 1.55vh;  /* === (#scroll-area padding-top + #scroll-line height + #scroll-area padding-bottom - #scroller height) / 2 */
+            pointer-events: none;
+        }
+
+        #xload-button-container, #play-button-container {
+            position: absolute;
+            margin: 1.8vh 6vw;
+            bottom: 0;
+        }
+        #xload-button-container {
+            left: 0;
+        }
+        #xload-button-container img {
+            margin-right: min(0.8vh, 1.6vw);  /* Constant proportion 1:2 */
+        }
+        #play-button-container {
+            right: 0;
+        }
+        #xload-button-container, #play-button-container, #control-strip img {
+            height: min(5vh, 10vw);  /* Constant proportion 1:2 */
+        }
+        #play-button-container img {
+            margin-left: min(0.8vh, 1.6vw);  /* Constant proportion 1:2 */
+            opacity: 0.5;
+        }
+        #play-button-container img, #download-button, #load-more-button {
+            filter: invert(86%) sepia(100%) saturate(4013%) hue-rotate(265deg) brightness(95%) contrast(143%);  /* Change white to "indigo" hsl(267, 100%, 50%). */
+        }
+        #play-button-container img:hover, #download-button:hover, #load-more-button:hover {
+            filter: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    {% include "bug.html" %}
+
+    <div id="canvas1-container">
+        <canvas id="canvas1">Your browser does not support the canvas element.</canvas>
+    </div>
+
+    <canvas id="canvas2" class="hide-before-img-load toggle-hide">Your browser does not support the canvas element.</canvas>
+
+    <img id="load-more-button" src="{{ url_for('static', filename='mira3/load-more.png') }}">
+
+    <div id="control-strip" class="toggle-hide">
+
+        <div id="scroll-area" class="hide-before-img-load">
+            <div id="scroller" draggable="false"></div>
+            <hr id="scroll-line">
+        </div>
+
+        <div id="xload-button-container">
+            <img id="upload-button" src="{{ url_for('static', filename='mira3/arrow-up.png') }}">
+            <img id="download-button" class="flip-vertical" src="{{ url_for('static', filename='mira3/arrow-up.png') }}">
+        </div>
+
+        <div id="play-button-container" class="hide-before-img-load">
+            <img id="backward0" class="speed-button flip-horizontal" src="{{ url_for('static', filename='mira3/forward0.png') }}">
+            <img id="backward1" class="speed-button flip-horizontal" src="{{ url_for('static', filename='mira3/forward1.png') }}">
+            <img id="backward2" class="speed-button flip-horizontal" src="{{ url_for('static', filename='mira3/forward2.png') }}">
+            <img id="backward3" class="speed-button flip-horizontal" src="{{ url_for('static', filename='mira3/forward3.png') }}">
+            <img id="stop" src="{{ url_for('static', filename='mira3/stop.png') }}">
+            <img id="forward0" class="speed-button" src="{{ url_for('static', filename='mira3/forward0.png') }}">
+            <img id="forward1" class="speed-button" src="{{ url_for('static', filename='mira3/forward1.png') }}">
+            <img id="forward2" class="speed-button" src="{{ url_for('static', filename='mira3/forward2.png') }}">
+            <img id="forward3" class="speed-button" src="{{ url_for('static', filename='mira3/forward3.png') }}">
+        </div>
+
+    </div>
+
+    <input type="file" accept="image/*" name="image" id="file" style="display: none" onchange="userImageSelected(event)">
+
+</body>
+
+<script src="{{ url_for('static', filename='mira3/mainScript.js') }}"></script>
+
+</html>
