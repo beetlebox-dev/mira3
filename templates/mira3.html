@@ -10,16 +10,8 @@
     <title>MIRA3 | Image Animator</title>
     <meta name="description" content="An image animator.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ url_for('static', filename='bug.css') }}">
 
     <style>
-
-        #bug {
-            filter: invert(86%) sepia(100%) saturate(4013%) hue-rotate(265deg) brightness(95%) contrast(143%);  /* Change white to "indigo" hsl(267, 100%, 50%). */
-        }
-        #bug:hover {
-            filter: none;
-        }
 
         .hide-before-img-load {
             display: none;
@@ -138,8 +130,6 @@
 </head>
 
 <body>
-
-    {% include "bug.html" %}
 
     <div id="canvas1-container">
         <canvas id="canvas1">Your browser does not support the canvas element.</canvas>
