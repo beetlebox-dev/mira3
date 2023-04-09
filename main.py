@@ -2,7 +2,7 @@ from flask import Flask, Response, render_template, request, url_for, redirect
 from admin import admin_alert_thread
 
 
-# Copyright 2021 Johnathan Pennington | All rights reserved.
+# (c) 2022 Johnathan Pennington | All rights reserved.
 
 
 app = Flask(__name__)

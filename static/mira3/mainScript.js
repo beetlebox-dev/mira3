@@ -1,5 +1,5 @@
 
-// Copyright 2022 Johnathan Pennington | All rights reserved.
+// (c) 2022 Johnathan Pennington | All rights reserved.
 
 
 // CANVAS & CONTEXT
@@ -70,6 +70,15 @@ scrollerPositionCoeff, scrollerWidth, msecsPerFrameBySpeed, autoscrollSpeed, cur
 
 // EVENT LISTENERS
 
+// Prevent sticky CSS hover styling after a touch screen tap.
+for (const hoverElem of [uploadButton, downloadButton, stopButton, canvas2]) {
+    hoverElem.addEventListener('touchstart', event => {
+        // Does not move a touch screen's "pointing device" into the element, triggering a mouseenter event.
+        event.preventDefault();
+        hoverElem.click();
+    });
+};
+
 loadMoreButton.addEventListener('mousedown', event => {
 
     if (event.ctrlKey === false && event.button === 0 && workerWorking === false) {
@@ -100,7 +109,7 @@ document.getElementById('canvas1-container').addEventListener('mousedown', event
     if (event.ctrlKey === false && event.button === 0) toggleControlsVisibility();
 });
 
-canvas2.addEventListener('mousedown', event => {
+canvas2.addEventListener('click', event => {
     if (event.ctrlKey === false && event.button === 0) {
         swapImages = swapImages === false;
         drawScreens();
@@ -108,7 +117,7 @@ canvas2.addEventListener('mousedown', event => {
     };
 });
 
-uploadButton.addEventListener('mousedown', event => {
+uploadButton.addEventListener('click', event => {
     if (event.ctrlKey === false && event.button === 0) uploadButtonClick();
 });
 
@@ -122,7 +131,7 @@ uploadButton.addEventListener('mouseleave', () => {
     else startUploadEnticeLoop();
 });
 
-downloadButton.addEventListener('mousedown', event => {
+downloadButton.addEventListener('click', event => {
     if (event.ctrlKey === false && event.button === 0) downloadButtonClick();
 });
 
@@ -139,7 +148,7 @@ for (const direction of ['backward', 'forward']) {
         });
     };
 };
-stopButton.addEventListener('mousedown', event => {
+stopButton.addEventListener('click', event => {
     if (event.ctrlKey === false && event.button === 0) {
         changeAutoscrollSpeed(0);
         adminAlert();
