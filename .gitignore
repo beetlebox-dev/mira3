@@ -4,4 +4,5 @@ __pycache__/
 venv/
 
 site-data/
-gmail_api/
+gmail_api_store/
+gmail_api_temp/

@@ -14,3 +14,4 @@ __pycache__
 venv
 google/
 site-data/
+gmail_api_store/
