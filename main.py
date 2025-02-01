@@ -1,5 +1,5 @@
 from flask import Flask, Response, render_template, request, url_for, redirect
-from admin import admin_alert_thread
+from beetlebox.admin import admin_alert_thread
 
 
 # (c) 2022 Johnathan Pennington | All rights reserved.
