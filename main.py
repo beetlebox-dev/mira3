@@ -12,36 +12,20 @@ app = Flask(__name__)
 def page_not_found(e):
 
     skip_endpoints = tuple()
-    ignore_paths_starting_with = [  # Doesn't send an admin alert if request.path starts with any of these.
-        '20', 'admin', 'blog', 'cms', 'feed', 'media', 'misc', 'news', 'robots', 'site', 'sito',
-        'shop', 'test', 'web', 'wordpress', 'Wordpress', 'wp', 'Wp', 'xmlrpc.php',
-    ]
     site_root = url_for('mira3', _external=True).split('//', 1)[-1][:-1]
     # Siteroot includes domain, but removes http:// or https:// if present, and removes the final forward slash.
     a_text = site_root
     rel_path = '/'
 
-    request_of_concern = True
-    for path_to_ignore in ignore_paths_starting_with:
-        if request.path.startswith(f'/{path_to_ignore}'):
-            request_of_concern = False
-            break
-
-    if request_of_concern:
-
-        for rule in app.url_map.iter_rules():
-            if "GET" in rule.methods and rule.endpoint not in skip_endpoints and len(rule.arguments) == 0:
-                # Static folder has rule.arguments, so is skipped and rerouted to root.
-                if request.path.startswith(rule.rule):  # Rule.rule is relative path.
-                    rel_path = url_for(rule.endpoint)
-                    if rel_path == '/':
-                        continue  # Otherwise, displays final slash after site root <a> text.
-                    a_text = f'{site_root}<wbr>{rel_path}'
-                    break
-
-        message_body = f'Page not found: \n{request.url}\n' \
-                       f'Rendered page_not_found.html and suggested: \n{site_root}{rel_path}'
-        admin_alert_thread('Web App - 404', message_body)
+    for rule in app.url_map.iter_rules():
+        if "GET" in rule.methods and rule.endpoint not in skip_endpoints and len(rule.arguments) == 0:
+            # Static folder has rule.arguments, so is skipped and rerouted to root.
+            if request.path.startswith(rule.rule):  # Rule.rule is relative path.
+                rel_path = url_for(rule.endpoint)
+                if rel_path == '/':
+                    continue  # Otherwise, displays final slash after site root <a> text.
+                a_text = f'{site_root}<wbr>{rel_path}'
+                break
 
     return render_template('page_not_found.html', relpath=rel_path, a_text=a_text), 404
 
